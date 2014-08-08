@@ -1,19 +1,17 @@
 #Assumption: You are working in the right directory where the data files are
 
 # Step 1: Read the csv data
-powerconsumption <- read.csv("data/household_power_consumption.txt", sep = ";", na.string="?")
+powerconsumption <- read.table("data/household_power_consumption.txt", header= TRUE, sep = ";", na.string="?", stringsAsFactors = FALSE)
+powerconsumption$Date <- as.Date(powerconsumption$Date, "%d/%m/%Y")
 
 # Step 2: Subset the data to use only 2007-02-01 and 2007-02-02 date's data
-pc <- powerconsumption[as.Date(powerconsumption$Date) == "01/02/2007" | as.Date(powerconsumption$Date) == "02/02/2007",]
+powerconsumption <- subset(powerconsumption, Date %in% as.Date(c("2007-02-01", "2007-02-02")))
 
 # Step 3: Set the filename and file properties as required
-png(filename="plot1.png", width=480, height=480, bg = "transparent")
+png(filename="plot1.png", width=480, height=480)
 
 # Step 4: Create Histogram
-hs <- hist(pc$Global_active_power, plot = FALSE)
+hist(powerconsumption$Global_active_power, col = "red", main = "Global Active Power", xlab = "Global Active Power (kilowatts)")
 
-#Step 5: Plot the Histogram
-plot(hs, col = "red", main = "Global Active Power", xlab = "Global Active Power (kilowatts)")
-
-#Step 6: Close the file
+#Step 5: Close the file
 dev.off()
